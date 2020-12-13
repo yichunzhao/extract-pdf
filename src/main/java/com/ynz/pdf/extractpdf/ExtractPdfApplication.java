@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
+import java.io.FileWriter;
 
 @SpringBootApplication
 public class ExtractPdfApplication implements CommandLineRunner {
@@ -21,7 +22,11 @@ public class ExtractPdfApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         String text = pdfConverter.parse(new File("ARK_Trades.pdf"));
-        System.out.println(text);
+        //System.out.println(text);
+
+        File file = new File("myFile.txt");
+        FileWriter writer = new FileWriter(file);
+        writer.write(text);
 
     }
 
