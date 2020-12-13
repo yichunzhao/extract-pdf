@@ -1,4 +1,4 @@
-package com.ynz.pdf.extractpdf;
+package com.ynz.pdf.extractpdf.model;
 
 import lombok.Builder;
 import lombok.Data;

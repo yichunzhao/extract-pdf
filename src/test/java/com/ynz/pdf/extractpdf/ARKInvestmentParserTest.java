@@ -1,5 +1,6 @@
 package com.ynz.pdf.extractpdf;
 
+import com.ynz.pdf.extractpdf.converter.PdfToText;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
-import java.util.regex.Pattern;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -32,20 +32,20 @@ class ARKInvestmentParserTest {
     @Test
     void validateIfPdfToTextBeanIsCreated() {
         assertNotNull(pdfToText);
+        assertThat(text.length(), is(greaterThan(100)));
     }
 
     @Test
     void ifTextIsSplitIntoStringArray() {
-        String[] lines = Pattern.compile("\\r\\n").split(text);
+        String[] lines = text.split("\\r\\n");
         //it must have >100 lines
         assertThat(lines.length, is(greaterThan(100)));
     }
 
     @Test
     void testConvertingPdfTextToStringArrayBySystemLineSeparator() {
-        String[] lines = Pattern.compile(System.lineSeparator()).split(text);
-        String[] lines1 = Pattern.compile("\\r\\n").split(text);
-        assertThat(lines.length, is(greaterThan(1)));
+        String[] lines = text.split(System.lineSeparator());
+        String[] lines1 = text.split("\\r\\n");
         assertEquals(lines.length, lines1.length);
     }
 

@@ -1,5 +1,6 @@
-package com.ynz.pdf.extractpdf;
+package com.ynz.pdf.extractpdf.parser;
 
+import com.ynz.pdf.extractpdf.model.ARKInvestmentDataModel;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

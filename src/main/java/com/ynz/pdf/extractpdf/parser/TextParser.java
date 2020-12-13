@@ -1,4 +1,6 @@
-package com.ynz.pdf.extractpdf;
+package com.ynz.pdf.extractpdf.parser;
+
+import com.ynz.pdf.extractpdf.model.DataModel;
 
 import java.util.List;
 

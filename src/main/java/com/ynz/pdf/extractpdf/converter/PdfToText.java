@@ -1,4 +1,4 @@
-package com.ynz.pdf.extractpdf;
+package com.ynz.pdf.extractpdf.converter;
 
 import java.io.File;
 

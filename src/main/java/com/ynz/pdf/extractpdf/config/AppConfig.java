@@ -1,4 +1,4 @@
-package com.ynz.pdf.extractpdf;
+package com.ynz.pdf.extractpdf.config;
 
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.context.annotation.Bean;
