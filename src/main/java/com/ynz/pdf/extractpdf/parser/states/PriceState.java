@@ -1,17 +1,18 @@
 package com.ynz.pdf.extractpdf.parser.states;
 
-import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-public class PriceState implements State {
+@NoArgsConstructor
+public class PriceState extends CurrencyPattern implements State {
     private String word;
 
     @Override
     public void doAction(Context context) {
-        if (context.getCurrentState().equals(Columns.PRICE) && word.matches("[$]\\d+.\\d{2}")) {
+        this.word = context.getWord();
+
+        if (context.getCurrentState().equals(Columns.PRICE) && word.matches(curPattern)) {
 
             context.setNextState(Columns.LOW_PRICE);
         }
-
     }
 }

@@ -3,12 +3,14 @@ package com.ynz.pdf.extractpdf.parser.states;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class LastPriceState implements State {
-    private final String word;
+public class LastPriceState extends CurrencyPattern implements State {
+    private String word;
 
     @Override
     public void doAction(Context context) {
-        if (context.getCurrentState().equals(Columns.LAST_PRICE) && word.matches("[$]\\d+.\\d{2}")) {
+        this.word = context.getWord();
+
+        if (context.getCurrentState().equals(Columns.LAST_PRICE) && word.matches(curPattern)) {
 
             context.setNextState(Columns.DATE);
         }

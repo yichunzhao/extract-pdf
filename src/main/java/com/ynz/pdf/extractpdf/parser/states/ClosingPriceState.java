@@ -1,14 +1,16 @@
 package com.ynz.pdf.extractpdf.parser.states;
 
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@RequiredArgsConstructor
-public class ClosingPriceState implements State {
-    private final String word;
+@NoArgsConstructor
+public class ClosingPriceState extends CurrencyPattern implements State {
+    private String word;
 
     @Override
     public void doAction(Context context) {
-        if (context.getCurrentState().equals(Columns.CLOSING_PRICE) && word.matches("[$]\\d+.\\d{2}")) {
+        this.word = context.getWord();
+
+        if (context.getCurrentState().equals(Columns.CLOSING_PRICE) && word.matches(curPattern)) {
 
             context.setNextState(Columns.LAST_PRICE);
         }

@@ -1,17 +1,18 @@
 package com.ynz.pdf.extractpdf.parser.states;
 
-public class DateState implements State {
-    private static final String pattern = "\\d{1,2}/\\d{1,2}/\\d{4}";
-    private final String word;
+import lombok.NoArgsConstructor;
 
-    public DateState(String word) {
-        this.word = word;
-    }
+@NoArgsConstructor
+public class DateState implements State {
+    private static final String datePattern = "\\d{1,2}/\\d{1,2}/\\d{4}";
+    private String word;
 
     @Override
     public void doAction(Context context) {
+        this.word = context.getWord();
+
         //date
-        if (context.getCurrentState().equals(Columns.DATE) && word.matches(pattern)) {
+        if (context.getCurrentState().equals(Columns.DATE) && word.matches(datePattern)) {
 
             context.setNextState(Columns.DIRECTION);
         }

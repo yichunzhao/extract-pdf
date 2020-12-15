@@ -5,4 +5,6 @@ public interface Context {
 
     Columns getCurrentState();
 
+    String getWord();
+    String setWord(String word);
 }
