@@ -12,6 +12,7 @@ public class ClosingPriceState extends CurrencyPattern implements State {
 
         if (context.getCurrentState().equals(Columns.CLOSING_PRICE) && word.matches(curPattern)) {
 
+            context.getModel().setClosingPrice(word.trim());
             context.setNextState(Columns.LAST_PRICE);
         }
 

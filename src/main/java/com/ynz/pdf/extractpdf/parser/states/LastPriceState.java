@@ -12,6 +12,7 @@ public class LastPriceState extends CurrencyPattern implements State {
 
         if (context.getCurrentState().equals(Columns.LAST_PRICE) && word.matches(curPattern)) {
 
+            context.getModel().setRecentMarketPrice(word);
             context.setNextState(Columns.DATE);
         }
     }

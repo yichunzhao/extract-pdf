@@ -13,7 +13,7 @@ public class DateState implements State {
 
         //date
         if (context.getCurrentState().equals(Columns.DATE) && word.matches(datePattern)) {
-
+            context.getModel().setDate(word);
             context.setNextState(Columns.DIRECTION);
         }
 

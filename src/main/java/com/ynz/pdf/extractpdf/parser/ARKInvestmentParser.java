@@ -5,13 +5,17 @@ import com.ynz.pdf.extractpdf.parser.states.ClosingPriceState;
 import com.ynz.pdf.extractpdf.parser.states.Columns;
 import com.ynz.pdf.extractpdf.parser.states.Context;
 import com.ynz.pdf.extractpdf.parser.states.DateState;
+import com.ynz.pdf.extractpdf.parser.states.DirectionState;
 import com.ynz.pdf.extractpdf.parser.states.HighPriceState;
 import com.ynz.pdf.extractpdf.parser.states.LastPriceState;
 import com.ynz.pdf.extractpdf.parser.states.LowPriceState;
 import com.ynz.pdf.extractpdf.parser.states.PriceState;
+import com.ynz.pdf.extractpdf.parser.states.State;
 import com.ynz.pdf.extractpdf.parser.states.TickerState;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Component
@@ -21,7 +25,14 @@ public class ARKInvestmentParser implements TextParser<ARKInvestmentDataModel>, 
 
     private String word = null;
 
+    private ARKInvestmentDataModel model = new ARKInvestmentDataModel();
+
+    public ARKInvestmentParser() {
+
+    }
+
     DateState dateState = new DateState();
+    DirectionState directionState = new DirectionState();
     TickerState tickerState = new TickerState();
     PriceState priceState = new PriceState();
     LowPriceState lowPriceState = new LowPriceState();
@@ -29,40 +40,67 @@ public class ARKInvestmentParser implements TextParser<ARKInvestmentDataModel>, 
     ClosingPriceState closingPriceState = new ClosingPriceState();
     LastPriceState lastPriceState = new LastPriceState();
 
+    List<State> stateMachine = new LinkedList<>();
+
 
     @Override
     public List<ARKInvestmentDataModel> parse(String text) {
+        List<ARKInvestmentDataModel> list = new ArrayList<>();
+
         String[] lines = text.split(System.lineSeparator());
         for (String line : lines) {
-            String[] words = line.split("\\s");
-
-            for (String word : words) {
-                setWord(word);
-                //date
-                dateState.doAction(this);
-
-                //ticker
-                tickerState.doAction(this);
-
-                //price
-                priceState.doAction(this);
-
-                //low price
-                lowPriceState.doAction(this);
-
-                //high price
-                highPriceState.doAction(this);
-
-                //closing price
-                closingPriceState.doAction(this);
-
-                //last price
-                lastPriceState.doAction(this);
-
-            }
+            processLine(line);
+            if (validModel(getModel())) list.add(getModel());
         }
 
-        return null;
+        return list;
+    }
+
+    private boolean validModel(ARKInvestmentDataModel model) {
+        return model.getDate() != null && model.getDirection() != null && model.getTicker() != null && model.getPrice() != null
+                && model.getLowPrice() != null && model.getHighPrice() != null && model.getClosingPrice() != null
+                && model.getRecentMarketPrice() != null;
+
+    }
+
+    public void processLine(String line) {
+        String[] words = line.split("\\s");
+
+        for (String word : words) {
+            setWord(word);
+
+            switch (this.getCurrentState()) {
+                case DATE:
+                    dateState.doAction(this);
+                    break;
+                case DIRECTION:
+                    directionState.doAction(this);
+                    break;
+                case TICKER:
+                    tickerState.doAction(this);
+                    break;
+                case PRICE:
+                    priceState.doAction(this);
+                    break;
+                case LOW_PRICE:
+                    lowPriceState.doAction(this);
+                    break;
+                case HIGH_PRICE:
+                    highPriceState.doAction(this);
+                    break;
+                case CLOSING_PRICE:
+                    closingPriceState.doAction(this);
+                    break;
+                case LAST_PRICE:
+                    lastPriceState.doAction(this);
+                    break;
+                default:
+                    System.out.println("wrong state");
+                    break;
+            }
+
+        }
+
     }
 
     @Override
@@ -83,5 +121,10 @@ public class ARKInvestmentParser implements TextParser<ARKInvestmentDataModel>, 
     @Override
     public String setWord(String word) {
         return this.word = word;
+    }
+
+    @Override
+    public ARKInvestmentDataModel getModel() {
+        return this.model;
     }
 }

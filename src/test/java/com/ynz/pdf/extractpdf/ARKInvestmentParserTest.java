@@ -56,4 +56,9 @@ class ARKInvestmentParserTest {
     @Test
     void split() {
     }
+
+    @Test
+    void testHandleOneLine(){
+
+    }
 }

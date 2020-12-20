@@ -13,7 +13,7 @@ public class TickerState implements State {
         if (context.getCurrentState().equals(Columns.TICKER)) {
 
             if (word.matches("[A-Z]{2,5}")) {
-
+                context.getModel().setTicker(word.trim());
                 context.setNextState(Columns.PRICE);
             }
         }

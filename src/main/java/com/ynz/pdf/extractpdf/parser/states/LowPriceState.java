@@ -12,6 +12,7 @@ public class LowPriceState extends CurrencyPattern implements State {
 
         if (context.getCurrentState().equals(Columns.LOW_PRICE) && word.matches(curPattern)) {
 
+            context.getModel().setLowPrice(word);
             context.setNextState(Columns.HIGH_PRICE);
         }
     }
