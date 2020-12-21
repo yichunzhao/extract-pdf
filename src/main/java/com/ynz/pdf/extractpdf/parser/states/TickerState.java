@@ -1,18 +1,21 @@
 package com.ynz.pdf.extractpdf.parser.states;
 
+import com.ynz.pdf.extractpdf.statemachine.context.ARKLineTextContext;
+import com.ynz.pdf.extractpdf.statemachine.state.ARKLineTextState;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class TickerState implements State {
+public class TickerState implements ARKLineTextState {
+    private static final String pattern = "[A-Z]{2,5}";
     private String word;
 
     @Override
-    public void doAction(Context context) {
+    public void doAction(ARKLineTextContext context) {
         this.word = context.getWord();
 
         if (context.getCurrentState().equals(Columns.TICKER)) {
 
-            if (word.matches("[A-Z]{2,5}")) {
+            if (word.matches(pattern)) {
                 context.getModel().setTicker(word.trim());
                 context.setNextState(Columns.PRICE);
             }

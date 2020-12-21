@@ -3,15 +3,15 @@ package com.ynz.pdf.extractpdf.parser;
 import com.ynz.pdf.extractpdf.model.ARKDataModel;
 import com.ynz.pdf.extractpdf.parser.states.ClosingPriceState;
 import com.ynz.pdf.extractpdf.parser.states.Columns;
-import com.ynz.pdf.extractpdf.parser.states.Context;
 import com.ynz.pdf.extractpdf.parser.states.DateState;
 import com.ynz.pdf.extractpdf.parser.states.DirectionState;
 import com.ynz.pdf.extractpdf.parser.states.HighPriceState;
 import com.ynz.pdf.extractpdf.parser.states.LastPriceState;
 import com.ynz.pdf.extractpdf.parser.states.LowPriceState;
 import com.ynz.pdf.extractpdf.parser.states.PriceState;
-import com.ynz.pdf.extractpdf.parser.states.State;
+import com.ynz.pdf.extractpdf.statemachine.state.State;
 import com.ynz.pdf.extractpdf.parser.states.TickerState;
+import com.ynz.pdf.extractpdf.statemachine.context.ARKLineTextContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Component
-public class ARKInvestmentParser implements TextParser<ARKDataModel>, Context {
+public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTextContext {
 
     private Columns state = Columns.DATE;
 

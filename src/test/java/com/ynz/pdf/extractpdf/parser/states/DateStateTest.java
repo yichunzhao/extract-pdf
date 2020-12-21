@@ -1,6 +1,7 @@
 package com.ynz.pdf.extractpdf.parser.states;
 
 import com.ynz.pdf.extractpdf.parser.ARKInvestmentParser;
+import com.ynz.pdf.extractpdf.statemachine.state.ARKLineTextState;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,7 +68,7 @@ class DateStateTest {
 
     @Test
     void givenWordThatContainsHighPrice_ContextStateIsSetToClosingPrice() {
-        State highPriceState = new HighPriceState();
+        ARKLineTextState highPriceState = new HighPriceState();
         parser.setNextState(Columns.HIGH_PRICE);
         assertEquals(parser.getCurrentState(), Columns.HIGH_PRICE);
 
@@ -78,7 +79,7 @@ class DateStateTest {
 
     @Test
     void givenWordThatContainsClosingPrice_ContextStateIsSetToLastPrice() {
-        State closingPriceState = new ClosingPriceState();
+        ARKLineTextState closingPriceState = new ClosingPriceState();
         parser.setNextState(Columns.CLOSING_PRICE);
         assertEquals(parser.getCurrentState(), Columns.CLOSING_PRICE);
 
@@ -89,7 +90,7 @@ class DateStateTest {
 
     @Test
     void givenWordThatContainsLastPrice_ContextStateIsSetToDateState() {
-        State lastPriceState = new LastPriceState();
+        ARKLineTextState lastPriceState = new LastPriceState();
         parser.setNextState(Columns.LAST_PRICE);
         assertEquals(parser.getCurrentState(), Columns.LAST_PRICE);
 
