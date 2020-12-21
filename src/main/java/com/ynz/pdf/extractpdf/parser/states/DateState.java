@@ -14,9 +14,9 @@ public class DateState implements ARKLineTextState {
         this.word = context.getWord();
 
         //date
-        if (context.getCurrentState().equals(Columns.DATE) && word.matches(datePattern)) {
+        if ((context.getCurrentState() instanceof DateState) && word.matches(datePattern)) {
             context.getModel().setDate(word);
-            context.setNextState(Columns.DIRECTION);
+            context.setNextState(new DirectionState());
         }
     }
 }

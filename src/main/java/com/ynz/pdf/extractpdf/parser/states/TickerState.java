@@ -13,11 +13,10 @@ public class TickerState implements ARKLineTextState {
     public void doAction(ARKLineTextContext context) {
         this.word = context.getWord();
 
-        if (context.getCurrentState().equals(Columns.TICKER)) {
-
+        if (context.getCurrentState() instanceof TickerState) {
             if (word.matches(pattern)) {
                 context.getModel().setTicker(word.trim());
-                context.setNextState(Columns.PRICE);
+                context.setNextState(new PriceState());
             }
         }
     }

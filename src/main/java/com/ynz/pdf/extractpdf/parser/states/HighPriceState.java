@@ -11,9 +11,9 @@ public class HighPriceState extends CurrencyPattern implements ARKLineTextState 
     @Override
     public void doAction(ARKLineTextContext context) {
         this.word = context.getWord();
-        if (context.getCurrentState().equals(Columns.HIGH_PRICE) && word.matches(curPattern)) {
+        if (context.getCurrentState() instanceof HighPriceState && word.matches(curPattern)) {
             context.getModel().setHighPrice(word);
-            context.setNextState(Columns.CLOSING_PRICE);
+            context.setNextState(new ClosingPriceState());
         }
     }
 }
