@@ -3,7 +3,7 @@ package com.ynz.pdf.extractpdf.model;
 import lombok.Data;
 
 @Data
-public class ARKInvestmentDataModel implements DataModel {
+public class ARKDataModel implements DataModel {
     private String date;
     private String direction;
     private String ticker;

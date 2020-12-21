@@ -1,6 +1,6 @@
 package com.ynz.pdf.extractpdf.parser;
 
-import com.ynz.pdf.extractpdf.model.ARKInvestmentDataModel;
+import com.ynz.pdf.extractpdf.model.ARKDataModel;
 import com.ynz.pdf.extractpdf.parser.states.ClosingPriceState;
 import com.ynz.pdf.extractpdf.parser.states.Columns;
 import com.ynz.pdf.extractpdf.parser.states.Context;
@@ -19,13 +19,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Component
-public class ARKInvestmentParser implements TextParser<ARKInvestmentDataModel>, Context {
+public class ARKInvestmentParser implements TextParser<ARKDataModel>, Context {
 
     private Columns state = Columns.DATE;
 
     private String word = null;
 
-    private ARKInvestmentDataModel model = new ARKInvestmentDataModel();
+    private ARKDataModel model = new ARKDataModel();
 
     public ARKInvestmentParser() {
 
@@ -44,8 +44,8 @@ public class ARKInvestmentParser implements TextParser<ARKInvestmentDataModel>, 
 
 
     @Override
-    public List<ARKInvestmentDataModel> parse(String text) {
-        List<ARKInvestmentDataModel> list = new ArrayList<>();
+    public List<ARKDataModel> parse(String text) {
+        List<ARKDataModel> list = new ArrayList<>();
 
         String[] lines = text.split(System.lineSeparator());
         for (String line : lines) {
@@ -56,7 +56,7 @@ public class ARKInvestmentParser implements TextParser<ARKInvestmentDataModel>, 
         return list;
     }
 
-    private boolean validModel(ARKInvestmentDataModel model) {
+    private boolean validModel(ARKDataModel model) {
         return model.getDate() != null && model.getDirection() != null && model.getTicker() != null && model.getPrice() != null
                 && model.getLowPrice() != null && model.getHighPrice() != null && model.getClosingPrice() != null
                 && model.getRecentMarketPrice() != null;
@@ -124,7 +124,7 @@ public class ARKInvestmentParser implements TextParser<ARKInvestmentDataModel>, 
     }
 
     @Override
-    public ARKInvestmentDataModel getModel() {
+    public ARKDataModel getModel() {
         return this.model;
     }
 }

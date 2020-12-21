@@ -1,6 +1,6 @@
 package com.ynz.pdf.extractpdf.parser.states;
 
-import com.ynz.pdf.extractpdf.model.ARKInvestmentDataModel;
+import com.ynz.pdf.extractpdf.model.ARKDataModel;
 
 public interface Context {
     void setNextState(Columns state);
@@ -10,5 +10,5 @@ public interface Context {
     String getWord();
     String setWord(String word);
 
-    ARKInvestmentDataModel getModel();
+    ARKDataModel getModel();
 }

@@ -1,6 +1,6 @@
 package com.ynz.pdf.extractpdf.parser;
 
-import com.ynz.pdf.extractpdf.model.ARKInvestmentDataModel;
+import com.ynz.pdf.extractpdf.model.ARKDataModel;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,11 +16,11 @@ class ARKInvestmentParserTest {
     }
 
     @Test
-    void processLine() {
+    void givenLineWithCompletedStates_ParserCanFillALLAttributes() {
         String line = "9/14/2020 Sell CBMG $18.39 $18.16 $18.49 $18.38 $18.38";
         parser.processLine(line);
 
-        ARKInvestmentDataModel model = parser.getModel();
+        ARKDataModel model = parser.getModel();
 
         assertAll(
                 () -> assertThat(model.getDate(), is("9/14/2020")),
