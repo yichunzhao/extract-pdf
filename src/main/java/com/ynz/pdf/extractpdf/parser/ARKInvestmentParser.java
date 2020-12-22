@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 @NoArgsConstructor
 public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTextContext {
-    private static final String linePattern = "^\\d{1,2}/\\d{1,2}/\\d{4}.+[$]{1}\\d+.\\d{2}$";
+    private static final String linePattern = "^\\d{1,2}/\\d{1,2}/\\d{4}\\s+(Sell|Buy).+[$]\\d+.\\d{2}$";
 
     private ARKLineTextState currentState;
 

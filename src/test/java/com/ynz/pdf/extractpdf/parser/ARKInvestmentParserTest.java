@@ -37,7 +37,6 @@ class ARKInvestmentParserTest {
                 () -> assertThat(model.getClosingPrice(), is("$18.38")),
                 () -> assertThat(model.getRecentMarketPrice(), is("$18.38"))
         );
-
     }
 
     @Test
