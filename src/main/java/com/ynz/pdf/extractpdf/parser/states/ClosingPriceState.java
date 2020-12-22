@@ -15,6 +15,8 @@ public class ClosingPriceState extends CurrencyPattern implements ARKLineTextSta
         if (context.getCurrentState() instanceof ClosingPriceState && word.matches(curPattern)) {
             context.getModel().setClosingPrice(word.trim());
             context.setNextState(new RecentMarketPriceState());
+        } else {
+            context.setNextState(new BrokenState());
         }
     }
 

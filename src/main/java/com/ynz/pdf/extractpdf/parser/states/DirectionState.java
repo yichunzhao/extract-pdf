@@ -16,6 +16,8 @@ public class DirectionState implements ARKLineTextState {
         if (context.getCurrentState() instanceof DirectionState && (word.equals("Sell") || word.equals("Buy"))) {
             context.getModel().setDirection(word.trim());
             context.setNextState(new TickerState());
+        } else {
+            context.setNextState(new BrokenState());
         }
     }
 }

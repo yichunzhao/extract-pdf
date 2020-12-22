@@ -15,6 +15,8 @@ public class LowPriceState extends CurrencyPattern implements ARKLineTextState {
         if (context.getCurrentState() instanceof LowPriceState && word.matches(curPattern)) {
             context.getModel().setLowPrice(word);
             context.setNextState(new HighPriceState());
+        } else {
+            context.setNextState(new BrokenState());
         }
     }
 }

@@ -14,7 +14,10 @@ public class RecentMarketPriceState extends CurrencyPattern implements ARKLineTe
 
         if (context.getCurrentState() instanceof RecentMarketPriceState && word.matches(curPattern)) {
             context.getModel().setRecentMarketPrice(word);
+
             context.setNextState(new DateState());
+        } else {
+            context.setNextState(new BrokenState());
         }
     }
 }

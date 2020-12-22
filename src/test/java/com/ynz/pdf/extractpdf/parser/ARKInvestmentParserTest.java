@@ -3,9 +3,14 @@ package com.ynz.pdf.extractpdf.parser;
 import com.ynz.pdf.extractpdf.model.ARKDataModel;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ARKInvestmentParserTest {
 
@@ -34,4 +39,43 @@ class ARKInvestmentParserTest {
         );
 
     }
+
+    @Test
+    void givenCompleteARKReportLine_DetermineIfValid() {
+        String target = "9/14/2020 Sell CBMG $18.39 $18.16 $18.49 $18.38 $18.38";
+        assertTrue(parser.isValidLine(target));
+    }
+
+    @Test
+    void givenIncompleteARKReportLine_DetermineInvalid() {
+        String target = "9/15/2020";
+        assertFalse(parser.isValidLine(target));
+    }
+
+    @Test
+    void givenNotARKReportLine_DetermineInvalid() {
+        String target = "Page 5 of 86\n";
+        assertFalse(parser.isValidLine(target));
+    }
+
+    @Test
+    void givenReportLines_ParserDetermines() {
+        String lines =
+                "Recent Market Price\r\n" +
+                        "Date Direction Ticker Price Low Price High Price Closing Price Last Price As of \r\n" +
+                        "9/15/2020\r\n" +
+                        "9/14/2020 Sell CBMG $18.39 $18.16 $18.49 $18.38 $18.38\r\n" +
+                        "9/14/2020 Buy EXAS $77.79 $76.75 $79.14 $77.60 $77.60\r\n";
+        List<ARKDataModel> models = parser.parse(lines);
+        assertThat(models, hasSize(2));
+        assertThat(models.get(0).getDate(), is("9/14/2020"));
+        assertThat(models.get(1).getDirection(), is("Buy"));
+
+        assertAll(
+                () -> assertThat(models, hasSize(2)),
+                () -> assertThat(models.get(0).getDate(), is("9/14/2020")),
+                () -> assertThat(models.get(1).getDirection(), is("Buy"))
+        );
+    }
+
 }

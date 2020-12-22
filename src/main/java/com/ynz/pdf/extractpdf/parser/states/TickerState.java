@@ -17,6 +17,8 @@ public class TickerState implements ARKLineTextState {
             if (word.matches(pattern)) {
                 context.getModel().setTicker(word.trim());
                 context.setNextState(new PriceState());
+            } else {
+                context.setNextState(new BrokenState());
             }
         }
     }

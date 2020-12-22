@@ -1,6 +1,7 @@
 package com.ynz.pdf.extractpdf.parser;
 
 import com.ynz.pdf.extractpdf.model.ARKDataModel;
+import com.ynz.pdf.extractpdf.parser.states.BrokenState;
 import com.ynz.pdf.extractpdf.parser.states.DateState;
 import com.ynz.pdf.extractpdf.statemachine.context.ARKLineTextContext;
 import com.ynz.pdf.extractpdf.statemachine.state.ARKLineTextState;
@@ -13,12 +14,13 @@ import java.util.List;
 @Component
 @NoArgsConstructor
 public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTextContext {
+    private static final String linePattern = "^\\d{1,2}/\\d{1,2}/\\d{4}.+[$]{1}\\d+.\\d{2}$";
 
     private ARKLineTextState currentState;
 
     private String word;
 
-    private ARKDataModel model = new ARKDataModel();
+    private ARKDataModel model;
 
     @Override
     public List<ARKDataModel> parse(String text) {
@@ -26,25 +28,21 @@ public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTex
 
         String[] lines = text.split(System.lineSeparator());
         for (String line : lines) {
+            if (!isValidLine(line)) continue;
             processLine(line);
-            if (validModel(getModel())) list.add(getModel());
+            list.add(getModel());
         }
 
         return list;
     }
 
-    private boolean validModel(ARKDataModel model) {
-        return model.getDate() != null && model.getDirection() != null && model.getTicker() != null && model.getPrice() != null
-                && model.getLowPrice() != null && model.getHighPrice() != null && model.getClosingPrice() != null
-                && model.getRecentMarketPrice() != null;
-
-    }
-
     public void processLine(String line) {
         String[] words = line.split("\\s");
+        model = new ARKDataModel();
 
         for (String word : words) {
-            setWord(word);
+            if (this.currentState instanceof BrokenState) break;
+            this.setWord(word);
             if (this.currentState == null) setNextState(new DateState());
             this.currentState.doAction(this);
         }
@@ -73,4 +71,9 @@ public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTex
     public ARKDataModel getModel() {
         return this.model;
     }
+
+    public boolean isValidLine(String target) {
+        return target.matches(linePattern);
+    }
+
 }
