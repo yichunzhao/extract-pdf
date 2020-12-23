@@ -72,6 +72,10 @@ public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTex
         return this.model;
     }
 
+    public void setModel(ARKDataModel model) {
+        this.model = model;
+    }
+
     public boolean isValidLine(String target) {
         return target.matches(linePattern);
     }

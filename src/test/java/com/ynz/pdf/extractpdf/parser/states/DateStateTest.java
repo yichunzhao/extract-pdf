@@ -1,5 +1,6 @@
 package com.ynz.pdf.extractpdf.parser.states;
 
+import com.ynz.pdf.extractpdf.model.ARKDataModel;
 import com.ynz.pdf.extractpdf.parser.ARKInvestmentParser;
 import com.ynz.pdf.extractpdf.statemachine.state.ARKLineTextState;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,9 @@ import static org.hamcrest.Matchers.is;
 
 class DateStateTest {
     private ARKInvestmentParser parser = new ARKInvestmentParser();
+    {
+        parser.setModel(new ARKDataModel());
+    }
 
     @Test
     void givenWordThatContainsDate_ContextStateIsSetToDirection() {
