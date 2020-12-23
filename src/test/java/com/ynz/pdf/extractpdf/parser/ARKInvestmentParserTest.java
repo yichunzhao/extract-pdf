@@ -66,9 +66,6 @@ class ARKInvestmentParserTest {
                         "9/14/2020 Sell CBMG $18.39 $18.16 $18.49 $18.38 $18.38\r\n" +
                         "9/14/2020 Buy EXAS $77.79 $76.75 $79.14 $77.60 $77.60\r\n";
         List<ARKDataModel> models = parser.parse(lines);
-        assertThat(models, hasSize(2));
-        assertThat(models.get(0).getDate(), is("9/14/2020"));
-        assertThat(models.get(1).getDirection(), is("Buy"));
 
         assertAll(
                 () -> assertThat(models, hasSize(2)),
