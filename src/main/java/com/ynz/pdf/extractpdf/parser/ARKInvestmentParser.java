@@ -40,7 +40,7 @@ public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTex
         this.setLine(line);
         model = new ARKDataModel();
 
-        if (this.currentState == null) setNextState(new DateState());
+        if (this.currentState == null || this.currentState instanceof BrokenState) setNextState(new DateState());
 
         while (!(this.currentState instanceof BrokenState)) {
             this.currentState.doAction(this);

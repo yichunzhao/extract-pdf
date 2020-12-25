@@ -19,7 +19,7 @@ public class TickerState implements ARKLineTextState {
         if (context.getCurrentState() instanceof TickerState) {
             Matcher matcher = Pattern.compile(pattern).matcher(line);
             if (matcher.find()) {
-                context.getModel().setTicker(line.trim());
+                context.getModel().setTicker(line.substring(matcher.start(), matcher.end()).trim());
             }
             context.setNextState(new PriceState());
         }

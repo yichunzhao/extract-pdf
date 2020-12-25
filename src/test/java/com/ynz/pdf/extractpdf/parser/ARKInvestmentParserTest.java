@@ -1,7 +1,6 @@
 package com.ynz.pdf.extractpdf.parser;
 
 import com.ynz.pdf.extractpdf.model.ARKDataModel;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -76,7 +75,6 @@ class ARKInvestmentParserTest {
     }
 
     @Test
-    @Disabled
     void givenSpecificReportLine_ParseDetermine() {
         String lines = "9/10/2020 Buy WDI GR $0.91 $0.89 $0.95 $0.91 $0.91\r\n" +
                 "9/10/2020 Buy 6060 HK $45.17 $43.40 $45.60 $43.40 $43.40\r\n" +
