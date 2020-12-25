@@ -5,7 +5,9 @@ import com.ynz.pdf.extractpdf.parser.states.BrokenState;
 import com.ynz.pdf.extractpdf.parser.states.DateState;
 import com.ynz.pdf.extractpdf.statemachine.context.ARKLineTextContext;
 import com.ynz.pdf.extractpdf.statemachine.state.ARKLineTextState;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.List;
 
 @Component
 @NoArgsConstructor
+@Getter
+@Setter
 public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTextContext {
     private static final String linePattern = "^\\d{1,2}/\\d{1,2}/\\d{4}\\s+(Sell|Buy).+[$]\\d+.\\d{2}$";
 
@@ -50,29 +54,6 @@ public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTex
     @Override
     public void setNextState(ARKLineTextState state) {
         this.currentState = state;
-    }
-
-    @Override
-    public ARKLineTextState getCurrentState() {
-        return this.currentState;
-    }
-
-    @Override
-    public String getLine() {
-        return this.line;
-    }
-
-    public String setLine(String word) {
-        return this.line = word;
-    }
-
-    @Override
-    public ARKDataModel getModel() {
-        return this.model;
-    }
-
-    public void setModel(ARKDataModel model) {
-        this.model = model;
     }
 
     public boolean isValidLine(String target) {
