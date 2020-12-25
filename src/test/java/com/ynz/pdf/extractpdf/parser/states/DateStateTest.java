@@ -2,16 +2,17 @@ package com.ynz.pdf.extractpdf.parser.states;
 
 import com.ynz.pdf.extractpdf.model.ARKDataModel;
 import com.ynz.pdf.extractpdf.parser.ARKInvestmentParser;
-import com.ynz.pdf.extractpdf.statemachine.state.ARKLineTextState;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 
 class DateStateTest {
     private ARKInvestmentParser parser = new ARKInvestmentParser();
+
     {
         parser.setModel(new ARKDataModel());
     }
@@ -21,7 +22,7 @@ class DateStateTest {
         DateState dateState = new DateState();
         parser.setNextState(dateState);
 
-        parser.setWord("9/14/2020");
+        parser.setLine("8/26/2020 Sell 3690 HK $258.46 $251.60 $263.40 $258.80 $258.80");
         dateState.doAction(parser);
         assertThat(parser.getCurrentState(), is(instanceOf(DirectionState.class)));
     }
@@ -31,7 +32,7 @@ class DateStateTest {
         DirectionState directionState = new DirectionState();
         parser.setNextState(directionState);
 
-        parser.setWord("Sell");
+        parser.setLine("8/28/2020 Sell TSLA $2,279.06 $437.30 $463.70 $442.68 $442.68");
         directionState.doAction(parser);
         assertThat(parser.getCurrentState(), is(instanceOf(TickerState.class)));
     }
@@ -41,7 +42,7 @@ class DateStateTest {
         TickerState tickerState = new TickerState();
         parser.setNextState(tickerState);
 
-        parser.setWord("LC");
+        parser.setLine("8/28/2020 Sell TSLA $2,279.06 $437.30 $463.70 $442.68 $442.68");
         tickerState.doAction(parser);
         assertThat(parser.getCurrentState(), is(instanceOf(PriceState.class)));
     }
@@ -51,49 +52,48 @@ class DateStateTest {
         TickerState tickerState = new TickerState();
         parser.setNextState(tickerState);
 
-        parser.setWord("NTDOY");
+        parser.setLine("8/26/2020 Sell 3690 HK $258.46 $251.60 $263.40 $258.80 $258.80");
         tickerState.doAction(parser);
         assertThat(parser.getCurrentState(), is(instanceOf(PriceState.class)));
     }
 
     @Test
-    void givenWordThatContainsPrice_ContextStateIsSetToLowPrice() {
+    void givenWordThatContainsPrice_ContextStateIsSetToBrokenState() {
         PriceState priceState = new PriceState();
         parser.setNextState(priceState);
 
-        parser.setWord("$39.00");
+        parser.setLine("8/26/2020 Sell 3690 HK $258.46 $251.60 $263.40 $258.80 $258.80");
         priceState.doAction(parser);
-        assertThat(parser.getCurrentState(), is(instanceOf(LowPriceState.class)));
+        assertThat(parser.getCurrentState(), is(instanceOf(BrokenState.class)));
+
+        assertAll(
+                () -> assertThat(parser.getCurrentState(), is(instanceOf(BrokenState.class))),
+                () -> assertThat(parser.getModel().getPrice(), is("$258.46")),
+                () -> assertThat(parser.getModel().getLowPrice(), is("$251.60")),
+                () -> assertThat(parser.getModel().getHighPrice(), is("$263.40")),
+                () -> assertThat(parser.getModel().getClosingPrice(), is("$258.80")),
+                () -> assertThat(parser.getModel().getRecentMarketPrice(), is("$258.80"))
+        );
     }
 
     @Test
-    void givenWordThatContainsHighPrice_ContextStateIsSetToClosingPrice() {
-        ARKLineTextState highPriceState = new HighPriceState();
-        parser.setNextState(highPriceState);
+    void givenWordThatContainsPriceHavingComma_ContextStateIsSetToBrokenState() {
+        PriceState priceState = new PriceState();
+        parser.setNextState(priceState);
 
-        parser.setWord("$39.00");
-        highPriceState.doAction(parser);
-        assertThat(parser.getCurrentState(), is(instanceOf(ClosingPriceState.class)));
+        parser.setLine("8/20/2020 Sell TSLA $1,990.24 $371.41 $404.40 $400.37 $400.37");
+        priceState.doAction(parser);
+        assertThat(parser.getCurrentState(), is(instanceOf(BrokenState.class)));
+
+        assertAll(
+                () -> assertThat(parser.getCurrentState(), is(instanceOf(BrokenState.class))),
+                () -> assertThat(parser.getModel().getPrice(), is("$1,990.24")),
+                () -> assertThat(parser.getModel().getLowPrice(), is("$371.41")),
+                () -> assertThat(parser.getModel().getHighPrice(), is("$404.40")),
+                () -> assertThat(parser.getModel().getClosingPrice(), is("$400.37")),
+                () -> assertThat(parser.getModel().getRecentMarketPrice(), is("$400.37"))
+        );
     }
 
-    @Test
-    void givenWordThatContainsClosingPrice_ContextStateIsSetToLastPrice() {
-        ARKLineTextState closingPriceState = new ClosingPriceState();
-        parser.setNextState(closingPriceState);
-
-        parser.setWord("$39.00");
-        closingPriceState.doAction(parser);
-        assertThat(parser.getCurrentState(), is(instanceOf(RecentMarketPriceState.class)));
-    }
-
-    @Test
-    void givenWordThatContainsLastPrice_ContextStateIsSetToDateState() {
-        ARKLineTextState lastPriceState = new RecentMarketPriceState();
-        parser.setNextState(lastPriceState);
-
-        parser.setWord("$39.00");
-        lastPriceState.doAction(parser);
-        assertThat(parser.getCurrentState(), is(instanceOf(DateState.class)));
-    }
 
 }

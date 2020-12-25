@@ -1,6 +1,7 @@
 package com.ynz.pdf.extractpdf.parser;
 
 import com.ynz.pdf.extractpdf.model.ARKDataModel;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -72,6 +73,24 @@ class ARKInvestmentParserTest {
                 () -> assertThat(models.get(0).getDate(), is("9/14/2020")),
                 () -> assertThat(models.get(1).getDirection(), is("Buy"))
         );
+    }
+
+    @Test
+    @Disabled
+    void givenSpecificReportLine_ParseDetermine() {
+        String lines = "9/10/2020 Buy WDI GR $0.91 $0.89 $0.95 $0.91 $0.91\r\n" +
+                "9/10/2020 Buy 6060 HK $45.17 $43.40 $45.60 $43.40 $43.40\r\n" +
+                "9/10/2020 Buy 9923 HK $48.77 $47.50 $49.50 $48.30 $48.30\r\n";
+
+        List<ARKDataModel> models = parser.parse(lines);
+
+        assertAll(
+                () -> assertThat(models, hasSize(3)),
+                () -> assertThat(models.get(0).getDate(), is("9/10/2020")),
+                () -> assertThat(models.get(1).getDirection(), is("Buy"))
+        );
+
+
     }
 
 }

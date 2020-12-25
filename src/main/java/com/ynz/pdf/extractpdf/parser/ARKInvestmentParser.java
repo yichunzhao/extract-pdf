@@ -18,7 +18,7 @@ public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTex
 
     private ARKLineTextState currentState;
 
-    private String word;
+    private String line;
 
     private ARKDataModel model;
 
@@ -37,13 +37,12 @@ public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTex
     }
 
     public void processLine(String line) {
-        String[] words = line.split("\\s");
+        this.setLine(line);
         model = new ARKDataModel();
 
-        for (String word : words) {
-            if (this.currentState instanceof BrokenState) break;
-            this.setWord(word);
-            if (this.currentState == null) setNextState(new DateState());
+        if (this.currentState == null) setNextState(new DateState());
+
+        while (!(this.currentState instanceof BrokenState)) {
             this.currentState.doAction(this);
         }
     }
@@ -59,12 +58,12 @@ public class ARKInvestmentParser implements TextParser<ARKDataModel>, ARKLineTex
     }
 
     @Override
-    public String getWord() {
-        return this.word;
+    public String getLine() {
+        return this.line;
     }
 
-    public String setWord(String word) {
-        return this.word = word;
+    public String setLine(String word) {
+        return this.line = word;
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.ynz.pdf.extractpdf.model.ARKDataModel;
 import com.ynz.pdf.extractpdf.statemachine.state.ARKLineTextState;
 
 public interface ARKLineTextContext extends Context<ARKLineTextState> {
-    String getWord();
+    String getLine();
 
     ARKDataModel getModel();
 }

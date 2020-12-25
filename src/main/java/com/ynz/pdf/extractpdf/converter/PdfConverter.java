@@ -1,7 +1,6 @@
 package com.ynz.pdf.extractpdf.converter;
 
 
-import com.ynz.pdf.extractpdf.converter.PdfToText;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
