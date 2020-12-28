@@ -88,7 +88,6 @@ class ARKInvestmentParserTest {
                 () -> assertThat(models.get(1).getDirection(), is("Buy"))
         );
 
-
     }
 
 }
